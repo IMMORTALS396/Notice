@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Board</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            background: url(bg.svg) no-repeat center center/cover;
+            font-family: sans-serif;
+            padding-top: 50px;
+        }
+
+        .container{
+            width: 400px;
+            border-radius: 10px;
+            border: 2px solid wheat;
+            background-color: transparent;
+            backdrop-filter: blur(25px);
+            padding: 20px;
+            margin: 20px;
+        }
+
+        h2, h3{
+            text-align: center;
+            color: white;
+        }
+
+        .notice-list{
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .notice{
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .add-notice-form input[type="text"],
+        .add-notice-form textarea{
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 25px;
+            border: 2px solid white;
+            outline: none;
+            background-color: transparent;
+            color: white;
+        }
+
+        .add-notice-form input[type="date"],
+        .add-notice-form input[type="time"]{
+            width: 50%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 25px;
+            border: 2px solid white;
+            outline: none;
+            background-color: transparent;
+            color: white;
+        }
+
+        .add-notice-form input[type="button"]{
+            width: 30%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 25px;
+            border: 2px solid white;
+            background-color: #ECEAE2;
+            color: black;
+            cursor: pointer;
+        }
+
+        .add-notice-form input[type="button"]:hover{
+            background-color: rgba(255, 255, 255, 0.5);
+            color: black;
+        }
+
+        .add-notice-form label{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to the Notice Board</h2>
+        <ul class="notice-list">
+            <!-- Notices will be dynamically added here -->
+        </ul>
+        <div class="add-notice-form">
+            <h3>Add Notice</h3>
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title" required><br>
+            <label for="content">Content:</label><br>
+            <textarea id="content" name="content" rows="4" required></textarea><br>
+            <label for="date">Date:</label><br>
+            <input type="date" id="date" name="date" required><br>
+            <label for="time">Time:</label><br>
+            <input type="time" id="time" name="time" required><br>
+            <input type="button" value="Add Notice" onclick="addNotice()">
+        </div>
+    </div>
+
+    <script>
+        function addNotice() {
+            var title = document.getElementById("title").value;
+            var content = document.getElementById("content").value;
+            var date = document.getElementById("date").value;
+            var time = document.getElementById("time").value;
+
+            if (title && content && date && time) { // Ensure all fields are filled
+                const noticeDateTime = new Date(date + 'T' + time);
+                const now = new Date();
+
+                if (noticeDateTime > now) {
+                    // Schedule notice to be added
+                    const delay = noticeDateTime - now; // Delay in milliseconds
+
+                    setTimeout(function() {
+                        var li = document.createElement("li");
+                        li.classList.add("notice");
+                        li.textContent = `${title} - ${content}`;
+                        document.querySelector(".notice-list").appendChild(li);
+                    }, delay);
+
+                    // Clear input fields
+                    document.getElementById("title").value = '';
+                    document.getElementById("content").value = '';
+                    document.getElementById("date").value = '';
+                    document.getElementById("time").value = '';
+                } else {
+                    alert("The selected date and time must be in the future.");
+                }
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+    </script>
+</body>
+</html>
